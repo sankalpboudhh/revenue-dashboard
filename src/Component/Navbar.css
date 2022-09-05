@@ -1,0 +1,27 @@
+.navbar {
+    height: 10vh;
+    background: #2153a3;
+    /* display: flex;
+     justify-content: center;
+    align-items: center; */
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: space-between;
+}
+.selector {
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+    margin-top: 20px;
+
+    /* padding: 15px; */
+}
+.greeting{
+    color: white;
+    margin-right: 40px;
+    margin-top: 25px;
+
+}
