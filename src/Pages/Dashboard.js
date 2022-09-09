@@ -6,8 +6,9 @@ import SelectLabels from "../Component/Rough";
 export default function Dashboard() {
   return (
     <div>
-      <Navbar />
       {/* <SelectLabels /> */}
+      <Navbar />
+
       {/* <Highchart /> */}
     </div>
   );
