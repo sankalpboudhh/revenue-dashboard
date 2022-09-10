@@ -1,32 +1,20 @@
 import axios from "axios";
-import { FormControl, MenuItem, Select } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { Box, FormControl, MenuItem, Select } from "@material-ui/core";
+import React, { useContext, useEffect, useState } from "react";
 import "./Navbar.css";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
+import { TheContext, TheContextProvider } from "../Context";
 
-export default function SelectLabels() {
-  const [revenueList, setRevenueList] = useState([""]);
-  const [user, setUser] = useState("John Doe");
+function NavBar() {
   const [revenue, setRevenue] = useState("");
 
-  useEffect(() => {
-    const GetRevenues = async () => {
-      try {
-        const details = await axios.get(`http://fetest.pangeatech.net/data`);
-        const typeOfRevenues = [
-          ...new Set(details.data.map((item) => item.revenue_type)),
-        ];
-
-        setRevenueList(typeOfRevenues);
-      } catch (error) {
-        console.log("Error : ", error);
-      }
-    };
-    GetRevenues();
-  }, []);
+  const { revenueList, revenueData, user, setUser } = useContext(TheContext);
 
   const handleChange = (event) => {
     setRevenue(event.target.value);
   };
+
   return (
     <div>
       <nav className="navbar">
@@ -54,3 +42,5 @@ export default function SelectLabels() {
     </div>
   );
 }
+
+export default NavBar;

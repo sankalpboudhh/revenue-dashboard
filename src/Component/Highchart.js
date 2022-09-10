@@ -1,36 +1,96 @@
 import { Box } from "@material-ui/core";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import Navbar from "./Navbar";
+import axios from "axios";
+import { TheContext } from "../Context";
 
 function Highchart() {
-  const options = {
+  const { revenueData, setRevenueData } = useContext(TheContext);
+
+  console.log(revenueData);
+  // const getacv
+  var pointStart = Date.UTC(2020, 1, 1);
+
+  const highchartdata = {
     chart: {
       type: "line",
     },
     title: {
-      text: "My chart",
+      text: "",
     },
+    // plotOptions: {
+    //   series: {
+    //     pointStart: January,
+    //   },
+    // },
+
+    plotOptions: {
+      series: {
+        pointStart: pointStart,
+        pointInterval: 24 * 3600 * 1000 * 30,
+      },
+    },
+    // yAxis: {
+    //   categories: [
+    //     "Jan",
+    //     "Feb",
+    //     "Mar",
+    //     "Apr",
+    //     "May",
+    //     "Jun",
+    //     "Jul",
+    //     "Aug",
+    //     "Sep",
+    //     "Oct",
+    //     "Nov",
+    //     "Dec",
+    //   ],
+    // },
+    xAxis: {
+      min: Date.UTC(2020, 0, 0),
+      max: Date.UTC(2020, 12, 31),
+      allowDecimals: false,
+      type: "datetime",
+      tickInterval: 24 * 3600 * 1000 * 30, //one day
+      labels: {
+        rotation: 0,
+      },
+    },
+
     series: [
       {
-        data: [1, 2, 1, 4, 3, 6],
+        name: "dataaaaaa",
+        data: revenueData,
+      },
+      {
+        name: "Data 2",
+        data: [1, 100, 20],
       },
     ],
   };
+
+  //   useEffect(() => {
+  //     const getData = async () => {
+  //       try {
+  //         const details = await axios.get(`http://fetest.pangeatech.net/data`);
+  //         const dataitems = [...details.data.map((item) => item.revenue)];
+  //         setData(dataitems);
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     };
+
+  //     getData();
+  //   }, []);
+
+  //   console.log(data);
   return (
     <div>
-      <Box
-        sx={{
-          height: "300px",
-          width: "800px",
-          border: "4px solid black",
-          //   display: "flex",
-          //   justifyContent: "center",
-          //   alignItems: "center",
-          marginLeft: "100px",
-        }}
-      >
-        <HighchartsReact highcharts={Highcharts} options={options} />
+      <Box>
+        <HighchartsReact highcharts={Highcharts} options={highchartdata} />
+        {/* <h3>{revenueData}</h3> */}
       </Box>
     </div>
   );
