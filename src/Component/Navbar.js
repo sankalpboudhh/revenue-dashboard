@@ -1,18 +1,26 @@
-import axios from "axios";
-import { Box, FormControl, MenuItem, Select } from "@material-ui/core";
+import { FormControl, MenuItem, Select } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import "./Navbar.css";
-import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts";
-import { TheContext, TheContextProvider } from "../Context";
+import { TheContext } from "../Context";
 
 function NavBar() {
-  const [revenue, setRevenue] = useState("");
+  const [revenueList, setRevenueList] = useState([]);
+  const { user, apiDataArray, filteredRevenue, selectRevenueFilter } =
+    useContext(TheContext);
 
-  const { revenueList, revenueData, user, setUser } = useContext(TheContext);
+  useEffect(() => {
+    if (!apiDataArray || apiDataArray.length === 0) return;
+    const tempRevenueList = [
+      ...new Set(apiDataArray.map((item) => item.revenue_type)),
+    ];
+
+    console.log("revenueList:", tempRevenueList);
+    setRevenueList(tempRevenueList);
+    handleChange({ target: { value: "" } });
+  }, [apiDataArray]);
 
   const handleChange = (event) => {
-    setRevenue(event.target.value);
+    selectRevenueFilter(event.target.value);
   };
 
   return (
@@ -21,7 +29,7 @@ function NavBar() {
         <div className="selector">
           <FormControl>
             <Select
-              value={revenue}
+              value={filteredRevenue}
               onChange={handleChange}
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}

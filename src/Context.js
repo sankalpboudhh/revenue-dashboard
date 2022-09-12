@@ -1,43 +1,48 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 
-const TheContext = createContext();
+const TheContext = createContext([]);
 
 function TheContextProvider(props) {
-  //   const source = "http://fetest.pangeatech.net/data";
-
-  const [revenueList, setRevenueList] = useState([""]);
-  const [revenueData, setRevenueData] = useState([""]);
-  const [user, setUser] = useState("John Doe");
+  const [user] = useState("John Doe");
+  const [apiDataArray, setApiDataArray] = useState([]);
+  const [filteredDataArray, setFilteredDataArray] = useState([]);
+  const [filteredRevenue, setFilteredRevenue] = useState("");
 
   useEffect(() => {
-    const getRevenues = async () => {
+    const getApiData = async () => {
       try {
-        const details = await axios.get(`http://fetest.pangeatech.net/data`);
-        const typeOfRevenues = [
-          ...new Set(details.data.map((item) => item.revenue_type)),
-        ];
-
-        setRevenueList(typeOfRevenues);
+        const jsonData = await axios.get(`http://fetest.pangeatech.net/data`);
+        setApiDataArray(jsonData.data);
       } catch (error) {
-        console.log("Error : ", error);
+        console.log(error);
       }
     };
-    const getData = async () => {
-      try {
-        const details = await axios.get(`http://fetest.pangeatech.net/data`);
-        const dataitems = [...details.data.map((item) => item.acv)];
-        setRevenueData(dataitems);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getRevenues();
-    getData();
+    getApiData();
   }, []);
 
+  const selectRevenueFilter = (selectedRevenueFilter) => {
+    setFilteredRevenue(selectedRevenueFilter);
+    if (selectedRevenueFilter === "") {
+      setFilteredDataArray(apiDataArray);
+      return;
+    }
+    const tempDataArray = apiDataArray.filter(
+      (item) => item.revenue_type === selectedRevenueFilter
+    );
+    setFilteredDataArray(tempDataArray);
+  };
+
   return (
-    <TheContext.Provider value={{ revenueList, revenueData, user, setUser }}>
+    <TheContext.Provider
+      value={{
+        user,
+        apiDataArray,
+        filteredDataArray,
+        filteredRevenue,
+        selectRevenueFilter,
+      }}
+    >
       {props.children}
     </TheContext.Provider>
   );

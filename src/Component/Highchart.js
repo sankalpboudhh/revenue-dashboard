@@ -2,16 +2,28 @@ import { Box } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import Navbar from "./Navbar";
-import axios from "axios";
 import { TheContext } from "../Context";
 
 function Highchart() {
-  const { revenueData, setRevenueData } = useContext(TheContext);
+  const { filteredDataArray } = useContext(TheContext);
+  const [productAcvList, setProductAcvList] = useState({});
 
-  console.log(revenueData);
-  // const getacv
-  var pointStart = Date.UTC(2020, 1, 1);
+  useEffect(() => {
+    const productAcv = {};
+    console.log("filteredDataArray:", filteredDataArray);
+    if (filteredDataArray && filteredDataArray.length > 0) {
+      for (let i = 0; i < filteredDataArray.length; i++) {
+        let item = filteredDataArray[i];
+        let product = item.product;
+        if (!productAcv[product]) {
+          productAcv[product] = [];
+        }
+        productAcv[product].push(item.acv);
+      }
+      setProductAcvList(productAcv);
+      console.log("productAcv: ", productAcv);
+    }
+  }, [filteredDataArray]);
 
   const highchartdata = {
     chart: {
@@ -28,26 +40,15 @@ function Highchart() {
 
     plotOptions: {
       series: {
-        pointStart: pointStart,
+        pointStart: Date.UTC(2020, 1, 1),
         pointInterval: 24 * 3600 * 1000 * 30,
       },
     },
-    // yAxis: {
-    //   categories: [
-    //     "Jan",
-    //     "Feb",
-    //     "Mar",
-    //     "Apr",
-    //     "May",
-    //     "Jun",
-    //     "Jul",
-    //     "Aug",
-    //     "Sep",
-    //     "Oct",
-    //     "Nov",
-    //     "Dec",
-    //   ],
-    // },
+    yAxis: {
+      title: "ACV",
+      align: "low",
+    },
+
     xAxis: {
       min: Date.UTC(2020, 0, 0),
       max: Date.UTC(2020, 12, 31),
@@ -59,33 +60,11 @@ function Highchart() {
       },
     },
 
-    series: [
-      {
-        name: "dataaaaaa",
-        data: revenueData,
-      },
-      {
-        name: "Data 2",
-        data: [1, 100, 20],
-      },
-    ],
+    series: Object.entries(productAcvList).map((val) => {
+      return { name: val[0], data: val[1] };
+    }), // [{name: "Product -2", data: [1, 100, 20]}]
   };
 
-  //   useEffect(() => {
-  //     const getData = async () => {
-  //       try {
-  //         const details = await axios.get(`http://fetest.pangeatech.net/data`);
-  //         const dataitems = [...details.data.map((item) => item.revenue)];
-  //         setData(dataitems);
-  //       } catch (err) {
-  //         console.log(err);
-  //       }
-  //     };
-
-  //     getData();
-  //   }, []);
-
-  //   console.log(data);
   return (
     <div>
       <Box>
