@@ -1,6 +1,6 @@
 import { FormControl, MenuItem, Select } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
-import "./Navbar.css";
+import "./Component.css";
 import { TheContext } from "../Context";
 
 function NavBar() {
