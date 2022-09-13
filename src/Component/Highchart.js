@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { TheContext } from "../Context";
+import "./Component.css";
 
 function Highchart() {
   const { filteredDataArray } = useContext(TheContext);
@@ -10,7 +11,7 @@ function Highchart() {
 
   useEffect(() => {
     const productAcv = {};
-    console.log("filteredDataArray:", filteredDataArray);
+    // console.log("filteredDataArray:", filteredDataArray);
     if (filteredDataArray && filteredDataArray.length > 0) {
       for (let i = 0; i < filteredDataArray.length; i++) {
         let item = filteredDataArray[i];
@@ -21,7 +22,7 @@ function Highchart() {
         productAcv[product].push(item.acv);
       }
       setProductAcvList(productAcv);
-      console.log("productAcv: ", productAcv);
+      // console.log("productAcv: ", productAcv);
     }
   }, [filteredDataArray]);
 
@@ -46,7 +47,7 @@ function Highchart() {
     },
     yAxis: {
       title: "ACV",
-      align: "low",
+      // align: "low",
     },
 
     xAxis: {

@@ -14,7 +14,7 @@ function NavBar() {
       ...new Set(apiDataArray.map((item) => item.revenue_type)),
     ];
 
-    console.log("revenueList:", tempRevenueList);
+    // console.log("revenueList:", tempRevenueList);
     setRevenueList(tempRevenueList);
     handleChange({ target: { value: "" } });
   }, [apiDataArray]);
